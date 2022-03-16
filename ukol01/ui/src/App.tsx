@@ -1,43 +1,42 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import "./App.css";
 import { ClientConnection } from "./logic/ClientConnection";
 import { Log } from "./Log";
 
+const useNotes = (clientID: string, clientSeed: string) => {
+  const [notes, setNotes] = useState<string[]>([]);
+
+  const pushLoad = useCallback(
+    (note?: string) => {
+      const clientConnection = new ClientConnection(clientID, clientSeed);
+      clientConnection
+        .initLoginSend(note)
+        .then(() => setNotes(clientConnection.notes));
+    },
+    [clientID, clientSeed, setNotes]
+  );
+
+  return [notes, pushLoad] as const;
+};
+
 function App() {
   const [clientID, setClientID] = useState("");
   const [clientSeed, setClientSeed] = useState("");
-  const [notes, setNotes] = useState<string[]>([]);
   const [newNote, setNewNote] = useState("");
 
-  const [clientConnection, setClientConnection] = useState<ClientConnection>();
+  const [notes, pushLoad] = useNotes(clientID, clientSeed);
 
-  const onLoginCliecked = () => {
-    const clientConnection = new ClientConnection(clientID, clientSeed);
-    setClientConnection(clientConnection);
-    clientConnection
-      .initLoginSend()
-      .then(() => setNotes(clientConnection.notes));
+  const onLoadCliecked = () => {
+    pushLoad();
   };
 
   const onSendClicked = () => {
-    clientConnection
-      ?.initLoginSend(newNote)
-      .then(() => setNotes(clientConnection.notes));
+    pushLoad(newNote);
   };
 
   return (
     <div className="App">
       <div>
-        <div className="log-notes">
-          <ul className="notes">
-            {notes.map((x) => (
-              <li>{x}</li>
-            ))}
-          </ul>
-          <div className="log">
-            <Log />
-          </div>
-        </div>
         <div className="inputs">
           <label>
             ClientID
@@ -53,7 +52,7 @@ function App() {
               value={clientSeed}
             ></input>
           </label>
-          <button onClick={onLoginCliecked}>Login</button>
+          <button onClick={onLoadCliecked}>Load</button>
 
           <div>
             <label>
@@ -64,6 +63,16 @@ function App() {
               ></input>
             </label>
             <button onClick={onSendClicked}>Send</button>
+          </div>
+        </div>
+        <div className="log-notes">
+          <ul className="notes">
+            {[...notes].reverse().map((x, i) => (
+              <li key={i}>{x}</li>
+            ))}
+          </ul>
+          <div className="log">
+            <Log />
           </div>
         </div>
       </div>
