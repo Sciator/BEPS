@@ -1,0 +1,1 @@
+potřeba stáhnout [hashcat](https://hashcat.net/hashcat/) a rozbalit do hashcat složky aby platila cesta ./ukol07/hashcat/hashcat.exe

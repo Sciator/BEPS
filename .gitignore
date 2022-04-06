@@ -1,1 +1,3 @@
 node_modules
+ukol07/hashcat/**/*
+!ukol07/hashcat/.gitkeep

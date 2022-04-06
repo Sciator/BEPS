@@ -1,0 +1,4 @@
+Run on RTX3060ti:
+md5 found in approx 2h
+SHA1 found in approx 1h
+
