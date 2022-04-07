@@ -7,7 +7,6 @@ const noteService = new NoteService();
 const log: string[] = [];
 
 router.post("/init", (req, res) => {
-  console.log(req.body)
   const {
     clientId, n, fn
   } = req.body;
@@ -21,7 +20,6 @@ router.post("/init", (req, res) => {
 })
 
 router.post("/get-last-n", (req, res) => {
-  console.log(req.body)
   const {
     clientId
   } = req.body;
@@ -32,7 +30,6 @@ router.post("/get-last-n", (req, res) => {
 })
 
 router.post("/push-load", (req, res) => {
-  console.log(req.body)
   const {
     clientId, fn1
   } = req.body;
